@@ -1,52 +1,62 @@
 from django.db import models
 
 class Counselor(models.Model):
-    GENDER_MALE = 0
-    GENDER_FEMALE = 1
-    GENDER_CHOICES= [(GENDER_MALE, "Male"), (GENDER_FEMALE, "Female")]
-
     name = models.CharField(max_length=50)
-    gender = models.IntegerField(choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=10)
     level = models.ForeignKey('Level', on_delete=models.CASCADE)
     counsel_count = models.IntegerField(default=0)
     introduction = models.CharField(max_length=1000)
     is_counsel_gt_150 = models.IntegerField(default=0)
-    profile_image_url = models.URLField(max_length=200)
-    counsel_themes = models.ManyToManyField('Theme')
-    counsel_kinds = models.ManyToManyField('CounselKind')
+    profile_image_url = models.URLField(max_length=2000)
+    theme = models.ManyToManyField('Theme', through = 'CounselorTheme')
+    kind = models.ManyToManyField('Kind', through = 'CounselorKind')
 
     class Meta:
         db_table = "counselors"
 
 class Level(models.Model):
-    level = models.CharField(max_length=19)
+    name = models.CharField(max_length=19)
 
     class Meta:
         db_table = "levels"
 
 class Theme(models.Model):
-    theme = models.CharField(max_length=9)
+    name = models.CharField(max_length=9)
 
     class Meta:
         db_table = "themes"
 
-class CounselKind(models.Model):
-    counsel_kind = models.CharField(max_length=20)
+class CounselorTheme(models.Model):
+    counselor = models.ForeignKey('Counselor', on_delete=models.CASCADE)
+    theme = models.ForeignKey('Theme', on_delete=models.CASCADE)
 
     class Meta:
-        db_table = "counsel_kinds"
+        db_table = 'counselor_themes'
+
+class Kind(models.Model):
+    name = models.CharField(max_length=20)
+
+    class Meta:
+        db_table = "kinds"
+
+class CounselorKind(models.Model):
+    counselor = models.ForeignKey('Counselor', on_delete=models.CASCADE)
+    kind = models.ForeignKey('Kind', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'counselor_kinds'
 
 class Duration(models.Model):
-    duration = models.CharField(max_length=30)
+    name = models.CharField(max_length=30)
 
     class Meta:
         db_table = "durations"
 
 class Product(models.Model):
-    level = models.ForeignKey(Level, on_delete = models.CASCADE)
-    counsel_kind = models.ForeignKey(CounselKind, on_delete=models.CASCADE)
-    duration = models.ForeignKey(Duration, on_delete=models.CASCADE)
-    price = models.IntegerField(default=0)
+    level = models.ForeignKey('Level', on_delete = models.CASCADE)
+    kind = models.ForeignKey('Kind', on_delete=models.CASCADE)
+    duration = models.ForeignKey('Duration', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
         db_table = 'products'
