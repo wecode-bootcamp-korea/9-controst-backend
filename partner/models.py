@@ -1,15 +1,15 @@
 from django.db import models
 
 class Counselor(models.Model):
-    name              = models.CharField(max_length=50)
-    gender            = models.CharField(max_length=10)
-    level             = models.ForeignKey('Level', on_delete=models.CASCADE)
-    counsel_count     = models.IntegerField(default=0)
-    introduction      = models.CharField(max_length=1000)
-    is_counsel_gt_150 = models.IntegerField(default=0)
-    profile_image_url = models.URLField(max_length=2000)
-    theme             = models.ManyToManyField('Theme', through = 'CounselorTheme')
-    kind              = models.ManyToManyField('Kind', through = 'CounselorKind')
+    name                    = models.CharField(max_length=50)
+    gender                  = models.CharField(max_length=10)
+    level                   = models.ForeignKey('Level', on_delete=models.CASCADE)
+    counsel_count           = models.IntegerField(default=0)
+    introduction            = models.CharField(max_length=1000)
+    is_counsel_count_gt_150 = models.BooleanField(default=False)
+    profile_image_url       = models.URLField(max_length=2000)
+    theme                   = models.ManyToManyField('Theme', through = 'CounselorTheme')
+    kind                    = models.ManyToManyField('Kind', through = 'CounselorKind')
 
     class Meta:
         db_table = "counselors"
@@ -50,7 +50,7 @@ class Duration(models.Model):
     name = models.CharField(max_length=30)
 
     class Meta:
-        db_table = "durations"
+        db_table = "duration"
 
 class Product(models.Model):
     level    = models.ForeignKey('Level', on_delete = models.CASCADE)
@@ -60,5 +60,4 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'products'
-
 
