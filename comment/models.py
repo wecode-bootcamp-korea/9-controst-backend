@@ -5,7 +5,7 @@ from users.models import History
 class Review(models.Model):
     history = models.ForeignKey('History', on_delete = models.PROTECT)
     created_at =  models.DateTimeField(auto_now_add = True)
-    score = models.FloatField(decimal_places=1, defualt=2.5)
+    score = models.FloatField(defualt=2.5)
     comment = models.CharField(max_length=10000)
     theme = models.ManytoManyField('Theme', through='ReviewThemes', related_name = 'review') 
 
