@@ -1,6 +1,6 @@
 from django.db import models
 from partner.models import Counselor, Theme
-from user.models import History
+from users.models import History
 
 class Review(models.Model):
     history = models.ForeignKey('History', on_delete = models.PROTECT)
