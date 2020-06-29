@@ -1,7 +1,7 @@
 from django.db import models
 
 class Review(models.Model):
-    history    = models.ForeignKey('users.History', on_delete = models.PROTECT)
+    history    = models.ForeignKey('user.History', on_delete = models.PROTECT)
     created_at = models.DateTimeField(auto_now_add = True)
     score      = models.FloatField(default=2.5)
     comment    = models.CharField(max_length=10000)
