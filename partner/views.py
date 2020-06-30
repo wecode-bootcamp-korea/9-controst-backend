@@ -2,6 +2,7 @@ import json
 
 from django.views import View
 from django.http import JsonResponse
+from django.db.models import Avg
 
 from .models import (
         Counselor,
@@ -13,6 +14,9 @@ from .models import (
         Duration, 
         Product
         )
+from user.models import History
+
+from comment.models import Review
 
 class ListUp(View):
     def get(self, request):
@@ -21,6 +25,8 @@ class ListUp(View):
         products = Product.objects.all()
         for partner in partners:
             prices_list = []
+            stars=partner.history_set.aggregate(Avg('review__score'))
+            review_count=Review.objects.filter(history__in=partner.history_set.all()).count()
             prices = Product.objects.filter(level=partner.level)
             for price in prices:
                 prices_list.append(price.price)
@@ -31,7 +37,10 @@ class ListUp(View):
                      "counsel_count":partner.counsel_count, 
                      "introduction":partner.introduction, 
                      "is_cousel_count_gt_150":partner.is_counsel_count_gt_150, 
-                     "profile_image_url":partner.profile_image_url, "prices":prices_list}
+                     "profile_image_url":partner.profile_image_url, 
+                     "prices":prices_list,
+                     "stars":stars,
+                     "review_count":review_count}
                     )
 
         return JsonResponse({"information":partners_list}, status=200)
