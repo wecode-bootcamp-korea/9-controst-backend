@@ -5,17 +5,16 @@ from django.http import JsonResponse
 from django.db.models import Avg
 
 from .models import (
-        Counselor,
-        Level,
-        Theme, 
-        CounselorTheme,
-        Kind, 
-        CounselorKind, 
-        Duration, 
-        Product
-        )
+    Counselor,
+    Level,
+    Theme, 
+    CounselorTheme,
+    Kind, 
+    CounselorKind, 
+    Duration, 
+    Product
+)
 from user.models import History
-
 from comment.models import Review
 
 class ListUp(View):
@@ -25,11 +24,10 @@ class ListUp(View):
         products = Product.objects.all()
         for partner in partners:
             prices_list = []
-            stars=partner.history_set.aggregate(Avg('review__score'))
-            review_count=Review.objects.filter(history__in=partner.history_set.all()).count()
+            stars = partner.history_set.aggregate(Avg('review__score'))
+            review_count = Review.objects.filter(history__in=partner.history_set.all()).count()
             prices = Product.objects.filter(level=partner.level)
-            for price in prices:
-                prices_list.append(price.price)
+            [prices_list.append(price.price) for price in prices]
             partners_list.append(
                     {"name":partner.name, 
                      "gender":partner.gender, 
