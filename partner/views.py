@@ -42,3 +42,4 @@ class CounselorListView(View):
                 )
 
         return JsonResponse({"information":partners_list}, status=200)
+
