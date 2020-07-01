@@ -21,7 +21,6 @@ class ListUp(View):
     def get(self, request):
         partners_list = []
         partners = Counselor.objects.all()
-        products = Product.objects.all()
         for partner in partners:
             prices_list = []
             stars = partner.history_set.aggregate(Avg('review__score'))
