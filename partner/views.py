@@ -22,10 +22,10 @@ class CounselorListView(View):
         partners_list = []
         partners = Counselor.objects.all()
         for partner in partners:
-            stars = partner.history_set.aggregate(Avg('review__score'))
+            stars        = partner.history_set.aggregate(Avg('review__score'))
             review_count = Review.objects.filter(history__in=partner.history_set.all()).count()
-            prices = Product.objects.filter(level=partner.level)
-            prices_list= [price.price for price in prices]
+            prices       = Product.objects.filter(level=partner.level)
+            prices_list  = [price.price for price in prices]
             partners_list.append(
                     {
                         "name"                   : partner.name, 
@@ -42,4 +42,6 @@ class CounselorListView(View):
                 )
 
         return JsonResponse({"information":partners_list}, status=200)
+
+
 
