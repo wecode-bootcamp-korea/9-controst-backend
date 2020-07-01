@@ -61,3 +61,10 @@ class Product(models.Model):
     class Meta:
         db_table = 'products'
 
+class CounselorContent(models.Model):
+    name      = models.TextField()
+    counselor = models.OneToOneField('Counselor', on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'counselor_contents'
+
