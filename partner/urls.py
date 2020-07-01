@@ -1,8 +1,8 @@
 from django.urls import path
-from .views import ListUp
+from .views import CounselorListView
 
 urlpatterns = [
-    path('', ListUp.as_view()),
+    path('', CounselorListView.as_view()),
 ]
 
 
