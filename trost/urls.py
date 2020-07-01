@@ -21,4 +21,5 @@ from django.urls import (
 
 urlpatterns = [
    path('partner', include('partner.urls')),
+   path('offline', include('map.urls')),
 ]

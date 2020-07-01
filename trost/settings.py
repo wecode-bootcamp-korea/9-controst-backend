@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'partner',
     'user',
     'comment',
+    'map',
 ]
 
 MIDDLEWARE = [
