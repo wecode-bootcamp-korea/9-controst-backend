@@ -1,15 +1,24 @@
-from django.http import JsonResponse, HttpResponse
-from django.core.validators import RegexValidator
-from django.core.exceptions import ValidationError
-from partner.models import Counselor, Product
-from .models import History, User
-from trost.settings import SECRET_KEY
-from django.views import View
-from .models import User
 import bcrypt
 import names
 import json
 import jwt
+
+from django.http import JsonResponse, HttpResponse
+from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
+from django.views import View
+
+from trost.settings import SECRET_KEY
+from partner.models import (
+        Counselor,
+        Product
+)
+from .models import (
+        History,
+        User
+)
+from .models import User
+
 
 class SignUpView(View):
     def post(self, request):
@@ -59,6 +68,8 @@ class SignUpView(View):
                 email_validator(data['email'])
             except ValidationError:
                 return JsonResponse({'message':'Invalid email'}, status= 400)
+            except ValidationError:
+                return JsonResponse({'message':'Invalid Key'}, status= 400)
             else:
                 if User.objects.filter(email=data['email']).exists():
                     return JsonResponse({'message':'이미 사용 중인 이메일 입니다.'}, status= 400)
