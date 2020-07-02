@@ -1,6 +1,8 @@
 from django.http import JsonResponse, HttpResponse
 from django.core.validators import RegexValidator
 from django.core.exceptions import ValidationError
+from partner.models import Counselor, Product
+from .models import History, User
 from trost.settings import SECRET_KEY
 from django.views import View
 from .models import User
@@ -105,4 +107,21 @@ def login_decorator(func):
         return func(self, request, *args, **kwargs)
     return wrapper
 
-
+class HistoryView(View):
+    @login_decorator
+    def get(self, request):
+        account = request.user
+        user_info = History.objects.filter(user__email = account.email)
+        history_list = []
+        for i in range(len(user_info)):
+            history_list.append(
+                {
+                "counselor_name":user_info[i].counselor.name,
+                "counselor_level":user_info[i].counselor.level.name,
+                "profile_image_url":user_info[i].counselor.profile_image_url,
+                "product_kind":user_info[i].product.kind.name,
+                "product_duration":user_info[i].product.duration.name,
+                "product_price":user_info[i].product.price,
+                "counsel_date":user_info[i].created_at
+                })
+        return JsonResponse({"user_history":history_list}, status=200)
