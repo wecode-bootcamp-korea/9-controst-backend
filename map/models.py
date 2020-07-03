@@ -14,5 +14,5 @@ class CounselCenter(models.Model):
     counseling_type  = models.CharField(max_length=100,null=True, blank=True)
 
     class Meta:
-        db_table = 'counsel_centers'
+        db_table = 'counselcenters'
 
