@@ -5,7 +5,7 @@ from django.urls import (
 )
 
 urlpatterns = [
-   path('user/', include('user.urls'))
+   path('user/', include('user.urls')),
    path('partner', include('partner.urls')),
    path('offline', include('map.urls')),
 ]
