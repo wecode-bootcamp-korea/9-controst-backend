@@ -20,12 +20,12 @@ from comment.models import Review
 
 class CounselorListView(View):
     def get(self, request):
-        partners_list = []
         offset        = request.GET.get('offset', 1)
         limit         = request.GET.get('limit', 12)
         partners = Counselor.objects.prefetch_related('history_set').prefetch_related('history_set__review_set')[offset:limit]
         reviews  = Review.objects.select_related('history').all()
         products = Product.objects.select_related('level').all()
+        partners_list = []
         for partner in partners:
             stars        = partner.history_set.aggregate(Avg('review__score'))
             review_count = reviews.filter(history__in=partner.history_set.all()).count()
