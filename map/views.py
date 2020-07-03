@@ -2,17 +2,16 @@ import json
 
 from django.views import View
 from django.http import JsonResponse
-#from django.core.paginator import Paginator
 from .models import (
        CounselCenter 
 )
 
 class MapView(View):
     def get(self, request):
-        centers = CounselCenter.objects.all()
-        #paginator = Paginator(centers,20)
-        #page = request.GET.get('page', 1)
-        #location = paginator.page(page)
+        page    = request.GET.get('page', 1)
+        limit   = 20*int(page)
+        offset  = limit-20
+        centers = CounselCenter.objects.all()[offset:limit]
 
         locations = [ 
                 {
@@ -30,9 +29,5 @@ class MapView(View):
                     }
                 for center in centers
         ]
-        #paginator = Paginator(locations,20)
-        #page = request.GET.get('page',2)
-        #print(page)
-        #location = paginator.page(page)
 
         return JsonResponse({"location":locations}, status=200)
