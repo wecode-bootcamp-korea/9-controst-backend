@@ -28,10 +28,8 @@ class CounselorListView(View):
         partners       = Counselor.objects.prefetch_related('history_set').prefetch_related('history_set__review_set').prefetch_related('level__product_set')
         products       = Product.objects.select_related('level').all()
         review_results = partners.values('name').annotate(review_score=Avg('history__review__score'), review_count= Count('history__review'))
-        partners_list  = []
-        for index, partner in enumerate(partners):
-            prices = [price.price for price in products.filter(level=partner.level)]
-            partners_list.append(
+        prices         = [price for price in [list(partner.level.product_set.values_list('price', flat=True)) for partner in partners]] 
+        partners_list  = [
                 {
                         "partner_id"             : partner.id,
                         "name"                   : partner.name, 
@@ -41,11 +39,12 @@ class CounselorListView(View):
                         "introduction"           : partner.introduction, 
                         "is_cousel_count_gt_150" : partner.is_counsel_count_gt_150, 
                         "profile_image_url"      : partner.profile_image_url, 
-                        "prices"                 : prices,
+                        "prices"                 : [str(price) for price in prices[index]],
                         "stars"                  : review_results[index]['review_score'], 
                         "review_count"           : review_results[index]['review_count']
                      }
-                )
+                for index, partner in enumerate(partners)
+            ]
 
         return JsonResponse({"information":partners_list}, status=200)
 
