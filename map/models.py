@@ -16,4 +16,3 @@ class CounselCenter(models.Model):
     class Meta:
         db_table = 'counselcenters'
 
-# Create your models here.

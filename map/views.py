@@ -9,10 +9,8 @@ from .models import (
 
 class MapView(View):
     def get(self, request):
-        locations = []
         centers = CounselCenter.objects.all()
-        for center in centers:
-            locations.append(
+        locations = [ 
                 {
                     "mapX"                 : center.longitude,
                     "mapY"                 : center.latitude,
@@ -26,6 +24,7 @@ class MapView(View):
                     "trostPartners"        : eval(center.partner_info),
                     "counselingTypes"      : eval(center.counseling_type)
                     }
-        )
+                for center in centers
+        ]
 
         return JsonResponse({"location":locations}, status=200)

@@ -80,15 +80,14 @@ class CounselorDetailView(View):
 
          counselor_histories = Counselor.objects.prefetch_related('history_set').get(id=partner_id).history_set.all()
          counselor_reviews   = Review.objects.filter(history__in=counselor_histories)
-         reviews_list        = []
-         for i in counselor_reviews:
-             reviews_list.append(
+         reviews_list        = [
                  {
                      'review_created' : i.created_at,
                      'review_score'   : i.score,
                      'review_comment' : i.comment
-                 }
-             )
+                 } for review in counselor_reviews
+            ]
+
          partner_detail.append(
                  {
                  "reviews" : reviews_list
